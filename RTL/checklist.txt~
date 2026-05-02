@@ -1,0 +1,11 @@
+Modules:
+1-p_count.v
+2-instr_mem.v
+3-reg_file.v
+4-imm_gen.v
+5-alu.v
+6-control_unit.v
+7-data_mem.v
+8-cpu_top.v
+
+-tb_cpu.v
