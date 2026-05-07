@@ -6,8 +6,9 @@ module p_count (
 		);
 
    always @(posedge clk) begin
-      if (rst)	pc <= 0;
+      if (rst)	
+	  	pc <= 0;
       else
-	pc <= n_pc;
+		pc <= n_pc;
    end
 endmodule // p_count
