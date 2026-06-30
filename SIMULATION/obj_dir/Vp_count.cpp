@@ -19,7 +19,6 @@ Vp_count::Vp_count(VerilatedContext* _vcontextp__, const char* _vcname__)
     , rs1{vlSymsp->TOP.rs1}
     , rs2{vlSymsp->TOP.rs2}
     , rd{vlSymsp->TOP.rd}
-    , imm_gen__02Eclk{vlSymsp->TOP.imm_gen__02Eclk}
     , cpu_top__02Erst{vlSymsp->TOP.cpu_top__02Erst}
     , n_pc{vlSymsp->TOP.n_pc}
     , p_count__02Epc{vlSymsp->TOP.p_count__02Epc}

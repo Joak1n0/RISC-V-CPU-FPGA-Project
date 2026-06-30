@@ -192,7 +192,6 @@ VL_ATTR_COLD void Vp_count___024root___ctor_var_reset(Vp_count___024root* vlSelf
     vlSelf->wd = VL_RAND_RESET_I(32);
     vlSelf->rd1 = VL_RAND_RESET_I(32);
     vlSelf->rd2 = VL_RAND_RESET_I(32);
-    vlSelf->imm_gen__02Eclk = VL_RAND_RESET_I(1);
     vlSelf->imm_gen__02Einstr = VL_RAND_RESET_I(32);
     vlSelf->imm = VL_RAND_RESET_I(32);
     vlSelf->cpu_top__02Eclk = VL_RAND_RESET_I(1);

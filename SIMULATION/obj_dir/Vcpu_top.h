@@ -5,47 +5,30 @@
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef VERILATED_VP_COUNT_H_
-#define VERILATED_VP_COUNT_H_  // guard
+#ifndef VERILATED_VCPU_TOP_H_
+#define VERILATED_VCPU_TOP_H_  // guard
 
 #include "verilated.h"
 
-class Vp_count__Syms;
-class Vp_count___024root;
+class Vcpu_top__Syms;
+class Vcpu_top___024root;
+class VerilatedVcdC;
 
 // This class is the main interface to the Verilated model
-class alignas(VL_CACHE_LINE_BYTES) Vp_count VL_NOT_FINAL : public VerilatedModel {
+class alignas(VL_CACHE_LINE_BYTES) Vcpu_top VL_NOT_FINAL : public VerilatedModel {
   private:
     // Symbol table holding complete model state (owned by this class)
-    Vp_count__Syms* const vlSymsp;
+    Vcpu_top__Syms* const vlSymsp;
 
   public:
 
     // PORTS
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
-    VL_IN8(&p_count__02Eclk,0,0);
-    VL_IN8(&instr_mem__02Eclk,0,0);
-    VL_IN8(&reg_file__02Eclk,0,0);
-    VL_IN8(&cpu_top__02Eclk,0,0);
-    VL_IN8(&p_count__02Erst,0,0);
-    VL_IN8(&instr_mem__02Erst,0,0);
-    VL_IN8(&we,0,0);
-    VL_IN8(&rs1,4,0);
-    VL_IN8(&rs2,4,0);
-    VL_IN8(&rd,4,0);
-    VL_IN8(&cpu_top__02Erst,0,0);
-    VL_IN(&n_pc,31,0);
-    VL_OUT(&p_count__02Epc,31,0);
-    VL_IN(&addr,31,0);
-    VL_OUT(&instr_mem__02Einstr,31,0);
-    VL_IN(&wd,31,0);
-    VL_OUT(&rd1,31,0);
-    VL_OUT(&rd2,31,0);
-    VL_IN(&imm_gen__02Einstr,31,0);
-    VL_OUT(&imm,31,0);
-    VL_IN(&cpu_top__02Einstr,31,0);
-    VL_OUT(&cpu_top__02Epc,31,0);
+    VL_IN8(&clk,0,0);
+    VL_IN8(&rst,0,0);
+    VL_IN(&instr,31,0);
+    VL_OUT(&pc,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.
@@ -53,19 +36,19 @@ class alignas(VL_CACHE_LINE_BYTES) Vp_count VL_NOT_FINAL : public VerilatedModel
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
-    Vp_count___024root* const rootp;
+    Vcpu_top___024root* const rootp;
 
     // CONSTRUCTORS
     /// Construct the model; called by application code
     /// If contextp is null, then the model will use the default global context
     /// If name is "", then makes a wrapper with a
     /// single model invisible with respect to DPI scope names.
-    explicit Vp_count(VerilatedContext* contextp, const char* name = "TOP");
-    explicit Vp_count(const char* name = "TOP");
+    explicit Vcpu_top(VerilatedContext* contextp, const char* name = "TOP");
+    explicit Vcpu_top(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
-    virtual ~Vp_count();
+    virtual ~Vcpu_top();
   private:
-    VL_UNCOPYABLE(Vp_count);  ///< Copying not allowed
+    VL_UNCOPYABLE(Vcpu_top);  ///< Copying not allowed
 
   public:
     // API METHODS
@@ -97,6 +80,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vp_count VL_NOT_FINAL : public VerilatedModel
     /// Re-init after cloning the model at the process level (e.g. fork in Linux)
     /// Re-allocate necessary resources. Called after cloning.
     void atClone() const;
+    std::unique_ptr<VerilatedTraceConfig> traceConfig() const override final;
 };
 
 #endif  // guard

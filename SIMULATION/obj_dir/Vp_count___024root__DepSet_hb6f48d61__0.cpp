@@ -22,15 +22,18 @@ VL_INLINE_OPT void Vp_count___024root___ico_sequent__TOP__0(Vp_count___024root* 
                                                 (((- (IData)(
                                                              (vlSelf->imm_gen__02Einstr 
                                                               >> 0x1fU))) 
-                                                  << 0x14U) 
-                                                 | ((0xff000U 
-                                                     & vlSelf->imm_gen__02Einstr) 
-                                                    | ((0x800U 
-                                                        & (vlSelf->imm_gen__02Einstr 
-                                                           >> 9U)) 
-                                                       | (0x7feU 
-                                                          & (vlSelf->imm_gen__02Einstr 
-                                                             >> 0x14U)))))
+                                                  << 0x15U) 
+                                                 | ((0x100000U 
+                                                     & (vlSelf->imm_gen__02Einstr 
+                                                        >> 0xbU)) 
+                                                    | ((0xff000U 
+                                                        & vlSelf->imm_gen__02Einstr) 
+                                                       | ((0x800U 
+                                                           & (vlSelf->imm_gen__02Einstr 
+                                                              >> 9U)) 
+                                                          | (0x7feU 
+                                                             & (vlSelf->imm_gen__02Einstr 
+                                                                >> 0x14U))))))
                                                  : 0U)
                                              : 0U) : 0U)
                                      : ((4U & vlSelf->imm_gen__02Einstr)
@@ -40,33 +43,29 @@ VL_INLINE_OPT void Vp_count___024root___ico_sequent__TOP__0(Vp_count___024root* 
                                                  ((1U 
                                                    & vlSelf->imm_gen__02Einstr)
                                                    ? 
-                                                  ((0xfe0U 
-                                                    & (vlSelf->imm_gen__02Einstr 
-                                                       >> 0x14U)) 
-                                                   | (0x1fU 
-                                                      & (vlSelf->imm_gen__02Einstr 
-                                                         >> 7U)))
+                                                  (((- (IData)(
+                                                               (vlSelf->imm_gen__02Einstr 
+                                                                >> 0x1fU))) 
+                                                    << 0xdU) 
+                                                   | ((0x1000U 
+                                                       & (vlSelf->imm_gen__02Einstr 
+                                                          >> 0x13U)) 
+                                                      | ((0x800U 
+                                                          & (vlSelf->imm_gen__02Einstr 
+                                                             << 4U)) 
+                                                         | ((0x7e0U 
+                                                             & (vlSelf->imm_gen__02Einstr 
+                                                                >> 0x14U)) 
+                                                            | (0x1eU 
+                                                               & (vlSelf->imm_gen__02Einstr 
+                                                                  >> 7U))))))
                                                    : 0U)
                                                   : 0U))))
                         : 0U) : ((0x20U & vlSelf->imm_gen__02Einstr)
                                   ? ((0x10U & vlSelf->imm_gen__02Einstr)
-                                      ? ((8U & vlSelf->imm_gen__02Einstr)
-                                          ? 0U : ((4U 
-                                                   & vlSelf->imm_gen__02Einstr)
-                                                   ? 
-                                                  ((2U 
-                                                    & vlSelf->imm_gen__02Einstr)
-                                                    ? 
-                                                   ((1U 
-                                                     & vlSelf->imm_gen__02Einstr)
-                                                     ? 
-                                                    (vlSelf->imm_gen__02Einstr 
-                                                     >> 0xcU)
-                                                     : 0U)
-                                                    : 0U)
-                                                   : 0U))
-                                      : ((8U & vlSelf->imm_gen__02Einstr)
-                                          ? 0U : ((4U 
+                                      ? 0U : ((8U & vlSelf->imm_gen__02Einstr)
+                                               ? 0U
+                                               : ((4U 
                                                    & vlSelf->imm_gen__02Einstr)
                                                    ? 0U
                                                    : 
@@ -76,13 +75,16 @@ VL_INLINE_OPT void Vp_count___024root___ico_sequent__TOP__0(Vp_count___024root* 
                                                    ((1U 
                                                      & vlSelf->imm_gen__02Einstr)
                                                      ? 
-                                                    VL_EXTENDS_II(32,12, 
-                                                                  ((0xfe0U 
-                                                                    & (vlSelf->imm_gen__02Einstr 
-                                                                       >> 0x14U)) 
-                                                                   | (0x1fU 
-                                                                      & (vlSelf->imm_gen__02Einstr 
-                                                                         >> 7U))))
+                                                    (((- (IData)(
+                                                                 (vlSelf->imm_gen__02Einstr 
+                                                                  >> 0x1fU))) 
+                                                      << 0xcU) 
+                                                     | ((0xfe0U 
+                                                         & (vlSelf->imm_gen__02Einstr 
+                                                            >> 0x14U)) 
+                                                        | (0x1fU 
+                                                           & (vlSelf->imm_gen__02Einstr 
+                                                              >> 7U))))
                                                      : 0U)
                                                     : 0U))))
                                   : ((0x10U & vlSelf->imm_gen__02Einstr)
@@ -97,25 +99,12 @@ VL_INLINE_OPT void Vp_count___024root___ico_sequent__TOP__0(Vp_count___024root* 
                                                    ((1U 
                                                      & vlSelf->imm_gen__02Einstr)
                                                      ? 
-                                                    (((1U 
-                                                       == 
-                                                       (7U 
-                                                        & (vlSelf->imm_gen__02Einstr 
-                                                           >> 0xcU))) 
-                                                      || (5U 
-                                                          == 
-                                                          (7U 
-                                                           & (vlSelf->imm_gen__02Einstr 
-                                                              >> 0xcU))))
-                                                      ? 
-                                                     VL_EXTENDS_II(32,5, 
-                                                                   (0x1fU 
-                                                                    & (vlSelf->imm_gen__02Einstr 
-                                                                       >> 0x14U)))
-                                                      : 
-                                                     VL_EXTENDS_II(32,12, 
-                                                                   (vlSelf->imm_gen__02Einstr 
-                                                                    >> 0x14U)))
+                                                    (((- (IData)(
+                                                                 (vlSelf->imm_gen__02Einstr 
+                                                                  >> 0x1fU))) 
+                                                      << 0xcU) 
+                                                     | (vlSelf->imm_gen__02Einstr 
+                                                        >> 0x14U))
                                                      : 0U)
                                                     : 0U)))
                                       : ((8U & vlSelf->imm_gen__02Einstr)
@@ -191,7 +180,7 @@ VL_INLINE_OPT void Vp_count___024root___nba_sequent__TOP__0(Vp_count___024root* 
     }
     if ((1U & (~ (IData)(vlSelf->instr_mem__02Erst)))) {
         vlSelf->instr_mem__02Einstr = vlSelf->instr_mem__DOT__mem
-            [(0x3fU & (vlSelf->addr >> 2U))];
+            [(0xffU & (vlSelf->addr >> 2U))];
     }
     if (__Vdlyvset__instr_mem__DOT__mem__v0) {
         __Vilp = 0U;
@@ -397,8 +386,6 @@ void Vp_count___024root___eval_debug_assertions(Vp_count___024root* vlSelf) {
         Verilated::overWidthError("rs2");}
     if (VL_UNLIKELY((vlSelf->rd & 0xe0U))) {
         Verilated::overWidthError("rd");}
-    if (VL_UNLIKELY((vlSelf->imm_gen__02Eclk & 0xfeU))) {
-        Verilated::overWidthError("imm_gen.clk");}
     if (VL_UNLIKELY((vlSelf->cpu_top__02Eclk & 0xfeU))) {
         Verilated::overWidthError("cpu_top.clk");}
     if (VL_UNLIKELY((vlSelf->cpu_top__02Erst & 0xfeU))) {

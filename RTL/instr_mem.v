@@ -13,7 +13,7 @@ module instr_mem (
 				mem[i] <= 0;
 			end
 		end else begin
-			instr <= mem[addr[7:2]]; // Word-aligned access
+			instr <= mem[addr[9:2]]; // Word-aligned access
 		end
 	end
 endmodule // instr_mem

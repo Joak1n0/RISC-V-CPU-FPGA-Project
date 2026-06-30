@@ -1,13 +1,14 @@
-#include "Vcpu.h"
+#include "Vcpu_top.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
 int main(int argc, char** argv) {
     Verilated::commandArgs(argc, argv);
-    Vcpu* top = new Vcpu;
 
+    Vcpu_top* top = new Vcpu_top;
+
+    Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
-    Verilated::traceEverOn(tfp);
     top->trace(tfp, 99);
     tfp->open("simx.vcd");
 
@@ -15,43 +16,37 @@ int main(int argc, char** argv) {
     const vluint64_t CLK_PERIOD = 10;
     const vluint64_t HALF_PERIOD = CLK_PERIOD / 2;
 
-    // Initialize
     top->clk = 0;
     top->rst = 1;
-    top->instr = 32'b000000_00000_00000_00000_00000_100000; // ADD
 
-    while (!Verilated::gotFinish() && sim_time < 140) {  // Run until finish or time limit
-        // Set inputs based on simulation time
+    // Use C++ binary literals, not Verilog 32'b syntax
+    top->instr = 0b00000000000000000000000000100000; // ADD
+
+    while (!Verilated::gotFinish() && sim_time < 140) {
         if (sim_time == 20) {
-            top->rst = 0;  // Deassert reset
+            top->rst = 0;
         } else if (sim_time == 40) {
-            top->instr = 32'b000000_00000_00000_00000_00000_100010; // SUB
+            top->instr = 0b00000000000000000000000000100010; // SUB
         } else if (sim_time == 60) {
-            top->instr = 32'b000000_00000_00000_00000_00000_100100; // AND
+            top->instr = 0b00000000000000000000000000100100; // AND
         } else if (sim_time == 80) {
-            top->instr = 32'b000000_00000_00000_00000_00000_100101; // OR
+            top->instr = 0b00000000000000000000000000100101; // OR
         } else if (sim_time == 100) {
-            top->instr = 32'b000000_00000_00000_00000_00000_100110; // XOR
-        } else if (sim_time == 120) {
-            // End simulation (equivalent to $finish)
-            break;
+            top->instr = 0b00000000000000000000000000100110; // XOR
         }
 
-        // Toggle clock
         top->clk = !top->clk;
 
-        // Evaluate the model
         top->eval();
-
-        // Dump waveform
         tfp->dump(sim_time);
 
-        // Advance time
         sim_time += HALF_PERIOD;
     }
 
     tfp->close();
-    delete top;
+
     delete tfp;
+    delete top;
+
     return 0;
 }

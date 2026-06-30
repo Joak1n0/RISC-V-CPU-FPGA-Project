@@ -24,7 +24,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vp_count___024root final : public VerilatedMo
     VL_IN8(rs1,4,0);
     VL_IN8(rs2,4,0);
     VL_IN8(rd,4,0);
-    VL_IN8(imm_gen__02Eclk,0,0);
     VL_IN8(cpu_top__02Erst,0,0);
     CData/*0:0*/ __VstlFirstIteration;
     CData/*0:0*/ __VicoFirstIteration;
