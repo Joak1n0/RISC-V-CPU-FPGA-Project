@@ -1,26 +1,24 @@
-module tb_cpu (
-    input wire clk,
-    input wire rst
-);
+module tb_cpu;
 
-    reg [31:0] instr;
-    wire [31:0] pc;
+    reg clk = 0;
+    reg reset = 1;
 
-    cpu_top cpu (
+    cpu_top dut (
         .clk(clk),
-        .rst(rst),
-        .instr(instr),
-        .pc(pc)
+        .reset(reset)
     );
 
+    always #5 clk = ~clk;
+
     initial begin
-        // Initialize the instruction memory with some test instructions
-        instr = 32'h00000000; // NOP instruction (for example)
-        #10;
-        instr = 32'h00000001; // Some other instruction
-        #10;
-        instr = 32'h00000002; // Another instruction
-        #10;
+        $dumpfile("waveform.vcd");
+        $dumpvars(0, tb_cpu);
+
+        #20;
+        reset = 0;
+
+        #500;
         $finish;
     end
+
 endmodule
