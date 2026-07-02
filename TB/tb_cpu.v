@@ -1,11 +1,15 @@
 module tb_cpu;
 
     reg clk = 0;
-    reg reset = 1;
+    reg rst = 1;
+    reg [31:0] instr;
+    wire [31:0] pc;
 
     cpu_top dut (
         .clk(clk),
-        .reset(reset)
+        .rst(rst),
+        .instr(instr),
+        .pc(pc)
     );
 
     always #5 clk = ~clk;
@@ -15,7 +19,7 @@ module tb_cpu;
         $dumpvars(0, tb_cpu);
 
         #20;
-        reset = 0;
+        rst = 0;
 
         #500;
         $finish;
