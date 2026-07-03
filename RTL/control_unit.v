@@ -1,9 +1,19 @@
 module control_unit (
     input wire clk,
     input wire rst,
-    input wire [31:0] instr,
-    output reg [3:0] alu_op,
-    output reg [31:0] pc
+    input wire [6:0] op,
+    input wire [2:0] funct3,
+    input wire [6:0] funct7,
+    input wire zero;
+
+    output reg pc_src,
+    output reg ResultSrc,
+    output reg MemWrite,
+    output reg [2:0] ALUControl;
+    output reg ALUSrc,
+    output reg [1:0] ImmSrc,
+    output reg RegWrite,
+    
 );
     always @(posedge clk) begin
         if (rst) begin

@@ -20,7 +20,7 @@ module reg_file (
    //WRITE Operation
    always @(posedge clk) begin
       if (we && (rd != 5'd0)) begin
-	regs[rd] <= wd;
+	      regs[rd] <= wd;
       end
    end
 
