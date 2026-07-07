@@ -214,7 +214,7 @@ module cpu_top (
         .clk(clk),
         .rst_n(rst_n),
         
-        .addr({alu_result[31:2], 2'b00}), // Address from ALU result
+        .address({alu_result[31:2], 2'b00}), // Address from ALU result
         .write_data(mem_write_data), // Data to write (from register file)
         .write_enable(mem_write), // Write enable signal from control unit
         .byte_enable(mem_byte_enable), // Byte enable signals from load/store decoder
