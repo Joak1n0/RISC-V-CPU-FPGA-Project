@@ -1,27 +1,44 @@
 module reg_file (
-		 input wire	   clk,
-		 input wire	   we,  // write enable
-		 input wire [4:0]  rs1, // read register 1
-	         input wire [4:0]  rs2, // read register 2
-		 input wire [4:0]  rd,  // destination register
-		 input wire [31:0] wd,  // write data
-		 
-		 output reg [31:0] rd1, // read data 1
-		 output reg [31:0] rd2  // read data 2
-		 );
-   // define 32 registers of 32 bits
-   reg [31:0] regs [0:31];
+	input logic	   clk,
+   input logic      rst_n,
+	
+   input logic [4:0]	address1, 
+   input logic [4:0] address2,
+   output logic [31:0] read_data1,
+   output logic [31:0] read_data2,
 
-   //READ Operation
-   assign rd1 = (rs1 == 5'd0) ? 32'd0 : regs[rs1];
-   assign rd2 = (rs2 == 5'd0) ? 32'd0 : regs[rs2];
-   
+   input logic    write_enable,
+   input logic [31:0] write_data,
+   input logic [4:0] address3
 
-   //WRITE Operation
-   always @(posedge clk) begin
-      if (we && (rd != 5'd0)) begin
-	      regs[rd] <= wd;
+
+);
+   reg [31:0] registers [0:31];
+
+   // Synchronous reset and write (x0 is hardwired to 0)
+   always_ff @(posedge clk) begin
+      if (!rst_n) begin
+         for (int i = 0; i < 32; i++) begin
+            registers[i] <= 32'b0;
+         end
+      end else begin
+         if (write_enable && address3 != 0) begin
+            registers[address3] <= write_data;
+         end
       end
+   end
+
+   // Combinational read ports (reads return 0 for address 0)
+   always_comb begin
+      if (address1 == 5'd0)
+         read_data1 = 32'b0;
+      else
+         read_data1 = registers[address1];
+
+      if (address2 == 5'd0)
+         read_data2 = 32'b0;
+      else
+         read_data2 = registers[address2];
    end
 
 endmodule

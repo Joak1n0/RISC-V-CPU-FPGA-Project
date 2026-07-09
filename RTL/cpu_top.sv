@@ -2,10 +2,11 @@ module cpu_top (
     input wire clk,
     input wire rst_n
 );
+    wire [31:0] instr;
 
-/**
-* Program Counter
-*/
+    logic [24:0] brute_immediate;
+    assign brute_immediate = instr[31:7];
+    wire [31:0] immediate;
 
     reg [31:0] pc;
     logic [31:0] pc_next;
@@ -13,6 +14,26 @@ module cpu_top (
     logic pc_source;
 
     wire [1:0] second_add_source;
+
+    
+    logic [4:0] reg_source1;
+    assign reg_source1 = instr[19:15]; // Source register 1
+    logic [4:0] reg_source2;
+    assign reg_source2 = instr[24:20]; // Source register 2
+
+    logic [4:0] reg_dest;
+    assign reg_dest = instr[11:7]; // Destination register
+
+    wire [31:0] read_reg1;
+    wire [31:0] read_reg2;
+    logic wb_valid;
+
+    logic [31:0] write_back_data;
+
+/**
+* Program Counter
+*/
+    
 
     always_comb begin : pc_selector
         case (pc_source)
@@ -45,12 +66,11 @@ module cpu_top (
 
     // Isntruction Memory is a read-only memory that stores the program instructions. 
     //It is accessed using the program counter (PC) to fetch the current instruction to be executed.
-    wire [31:0] instr;
+    
 
     instr_mem im (
         .address(pc), // Address from Program Counter
-        
-        .dout(instr)
+        .instr(instr)
     );
 
 
@@ -75,8 +95,8 @@ module cpu_top (
     //out mux
     wire alu_source;
     wire [1:0] write_back_source;
-    wire pc_source;
-    wire [1:0] second_add_source;
+    
+    
 
 
     control_unit cu (
@@ -103,19 +123,8 @@ module cpu_top (
      * Register File
      */
 
-    logic [4:0] reg_source1;
-    assign reg_source1 = instr[19:15]; // Source register 1
-    logic [4:0] reg_source2;
-    assign reg_source2 = instr[24:20]; // Source register 2
-
-    logic [4:0] reg_dest;
-    assign reg_dest = instr[11:7]; // Destination register
-
-    wire [31:0] read_reg1;
-    wire [31:0] read_reg2;
-    logic wb_valid;
-
-    logic [31:0] write_back_data;
+    logic mem_read_write_back_valid;
+    logic [31:0] mem_read_write_back_data;
 
     always_comb begin : write_back_data_selector
         case (write_back_source)
@@ -157,10 +166,7 @@ module cpu_top (
      * Sign Extension
      */
 
-     logic [24:0] brute_immediate;
-     assign brute_immediate = instr[31:7];
-     wire [31:0] immediate;
-
+     
     sign_ext seu(
         .brute_immediate(brute_immediate),
         .imm_source(imm_source),
@@ -225,8 +231,7 @@ module cpu_top (
      * Memory Read Write Back Selector
      */
 
-    logic mem_read_write_back_valid;
-    logic [31:0] mem_read_write_back_data;
+    
 
     read_write_back_selector rwbs (
         .mem_read(mem_read),

@@ -1,6 +1,6 @@
 module instr_mem (
-    input  wire [31:0] addr,
-    output wire [31:0] instr
+    input  logic [31:0] address,
+    output logic [31:0] instr
 );
 
     reg [31:0] mem [0:255];
@@ -9,6 +9,6 @@ module instr_mem (
         $readmemh("SOFTWARE/main.hex", mem);
     end
 
-    assign instr = mem[addr[31:2]];
+    assign instr = mem[address[31:2]];
 
 endmodule

@@ -5,3 +5,4 @@ Modules:
 3- alu - Done
 4- data_mem - Done
 5- load_store_decoder - Done
+6- reg_file -
