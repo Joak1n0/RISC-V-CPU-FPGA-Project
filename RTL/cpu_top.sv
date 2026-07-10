@@ -68,7 +68,7 @@ module cpu_top (
     //It is accessed using the program counter (PC) to fetch the current instruction to be executed.
     
 
-    instr_mem im (
+    instr_mem instruction_mem (
         .address(pc), // Address from Program Counter
         .instr(instr)
     );
@@ -79,10 +79,10 @@ module cpu_top (
      */
     logic [6:0] op;
     assign op = instr[6:0]; // opcode
-    logic [2:0] funct3;
-    assign funct3 = instr[14:12]; // funct3
-    logic [6:0] funct7;
-    assign funct7 = instr[31:25]; // funct7
+    logic [2:0] func3;
+    assign func3 = instr[14:12]; // func3
+    logic [6:0] func7;
+    assign func7 = instr[31:25]; // func7
     wire alu_zero;
     wire alu_last_bit;
 
@@ -99,10 +99,10 @@ module cpu_top (
     
 
 
-    control_unit cu (
+    control_unit control_unit (
         .op(op),
-        .funct3(funct3),
-        .funct7(funct7),
+        .func3(func3),
+        .func7(func7),
         .alu_zero(alu_zero),
         .alu_last_bit(alu_last_bit),
 
@@ -147,17 +147,17 @@ module cpu_top (
         endcase
     end
 
-    reg_file rf (
+    reg_file reg_file (
         .clk(clk),
         .rst_n(rst_n),
 
-        .rs1(reg_source1), // Source register 1
-        .rs2(reg_source2), // Source register 2
+        .address1(reg_source1), // Source register 1
+        .address2(reg_source2), // Source register 2
 
-        .read_reg1(read_reg1), // Output for source register 1
-        .read_reg2(read_reg2), // Output for source register 2
+        .read_data1(read_reg1), // Output for source register 1
+        .read_data2(read_reg2), // Output for source register 2
 
-        .we(reg_write & wb_valid),       // Placeholder for write enable
+        .write_enable(reg_write & wb_valid),       // Placeholder for write enable
         .write_data(write_back_data),     // Data to write (from data memory)
         .address3(reg_dest) // Destination register address
     );
@@ -167,8 +167,8 @@ module cpu_top (
      */
 
      
-    sign_ext seu(
-        .brute_immediate(brute_immediate),
+    sign_extension sign_extension(
+        .source(brute_immediate),
         .imm_source(imm_source),
         .immediate(immediate)
     );
@@ -203,11 +203,11 @@ module cpu_top (
     wire [3:0] mem_byte_enable;
     wire [31:0] mem_write_data;
 
-    load_store_decoder lsd (
+    load_store_decoder ls_decoder (
         .alu_result_address(alu_result),
         .reg_read_data(read_reg2),
-        .funct3(funct3),
-        .byte_enable(mem_byte_enable),
+        .func3(func3),
+        .mem_byte_enable(mem_byte_enable),
         .data(mem_write_data)
     );
 
@@ -216,7 +216,7 @@ module cpu_top (
      */
     wire [31:0] mem_read;
 
-    data_mem dm (
+    data_mem data_mem (
         .clk(clk),
         .rst_n(rst_n),
         
@@ -233,11 +233,11 @@ module cpu_top (
 
     
 
-    read_write_back_selector rwbs (
-        .mem_read(mem_read),
+    data_reader data_reader (
+        .mem_data(mem_read),
         .be_mask(mem_byte_enable),
-        .funct3(funct3),
-        .write_back_data(mem_read_write_back_data),
-        .valid(mem_read_write_back_valid)
+        .func3(func3),
+        .wb_data(mem_read_write_back_data),
+        .wb_valid(mem_read_write_back_valid)
     );
 endmodule

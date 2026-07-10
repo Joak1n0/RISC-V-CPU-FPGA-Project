@@ -17,14 +17,14 @@ int main(int argc, char** argv) {
     const vluint64_t HALF_PERIOD = CLK_PERIOD / 2;
 
     top->clk = 0;
-    top->rst = 1;
+    top->rst_n = 1;
 
     // Use C++ binary literals, not Verilog 32'b syntax
     top->instr = 0b00000000000000000000000000100000; // ADD
 
     while (!Verilated::gotFinish() && sim_time < 140) {
         if (sim_time == 20) {
-            top->rst = 0;
+            top->rst_n = 0;
         } else if (sim_time == 40) {
             top->instr = 0b00000000000000000000000000100010; // SUB
         } else if (sim_time == 60) {

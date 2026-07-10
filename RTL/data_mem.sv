@@ -1,11 +1,10 @@
 module data_mem #(
-    parameter WORDS = 256,
-    parameter ADDRESS_BITS = $clog2(WORDS), // TODO : Verify that this is correct for the memory size
-    parameter mem_init_file = "data_mem_init.hex"
+    parameter WORDS = 128,
+    parameter mem_init_file = ""
 ) (
     input logic clk,
     input logic rst_n,
-    input logic [ADDRESS_BITS-1:0] address,
+    input logic [31:0] address,
     input logic [31:0] write_data,
     input logic write_enable,
     input logic [3:0] byte_enable,
@@ -23,9 +22,9 @@ module data_mem #(
     end
 
     always_ff @(posedge clk) begin : data_mem_write_read
-        if (rst_n == 1'b0) begin
+        if (!rst_n) begin
             for (int i = 0; i < WORDS; i = i + 1) begin
-                mem[i] <= 0;
+                mem[i] <= 32'd0;
             end
         end else begin
             if (address[1:0] != 2'b00) begin
@@ -33,15 +32,18 @@ module data_mem #(
             end else begin
                 for(int i = 0; i < 4; i = i + 1) begin
                     if (byte_enable[i] && write_enable) begin
-                        mem[address[9:2]][i*8 +: 8] <= write_data[i*8 +: 8]; //TODO: Verify address slicing is correct for the memory size
+                        /* verilator lint_off WIDTHTRUNC */
+                        mem[address[31:2]][i*8 +:8] <= write_data[i*8 +: 8]; //keyword: "indexed part-select"
+                        /* verilator lint_on WIDTHTRUNC */
                     end
                 end
             end
-            
         end
     end
 
     always_comb begin
-        read_data = mem[address[9:2]]; // Word-aligned access
+        /* verilator lint_off WIDTHTRUNC */
+        read_data = mem[address[31:2]]; // Word-aligned access
+        /* verilator lint_on WIDTHTRUNC */
     end
 endmodule // data_mem

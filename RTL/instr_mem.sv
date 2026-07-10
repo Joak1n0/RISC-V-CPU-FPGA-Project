@@ -9,6 +9,8 @@ module instr_mem (
         $readmemh("SOFTWARE/main.hex", mem);
     end
 
+    /* verilator lint_off WIDTHTRUNC */
     assign instr = mem[address[31:2]];
+    /* verilator lint_on WIDTHTRUNC */
 
 endmodule

@@ -1,6 +1,7 @@
 # Makefile for simulation of CPU using Verilator
 
 RTL_PATH = ../RTL
+PKG_PATH = ../PACKAGE
 
 TOP_MODULE = cpu_top
 TARGET = sim_cpu
@@ -15,23 +16,26 @@ VERILATOR_FLAGS = \
 	--trace \
 	--top-module $(TOP_MODULE)
 
+PKG_SRCS = $(PKG_PATH)/pkg_riscvi32.sv
+
 RTL_SRCS = \
-	$(RTL_PATH)/p_count.v \
-	$(RTL_PATH)/instr_mem.v \
-	$(RTL_PATH)/reg_file.v \
-	$(RTL_PATH)/imm_gen.v \
-	$(RTL_PATH)/alu.v \
-	$(RTL_PATH)/control_unit.v \
-	$(RTL_PATH)/data_mem.v \
-	$(RTL_PATH)/cpu_top.v
+	$(RTL_PATH)/instr_mem.sv \
+	$(RTL_PATH)/reg_file.sv \
+	$(RTL_PATH)/sign_extension.sv \
+	$(RTL_PATH)/load_store_decoder.sv \
+	$(RTL_PATH)/data_reader.sv \
+	$(RTL_PATH)/alu.sv \
+	$(RTL_PATH)/control_unit.sv \
+	$(RTL_PATH)/data_mem.sv \
+	$(RTL_PATH)/cpu_top.sv
 
 SIM_SRCS = \
 	sim_cpu_main.cpp
 
 all: $(TARGET)
 
-$(TARGET): $(RTL_SRCS) $(SIM_SRCS)
-	verilator $(VERILATOR_FLAGS) -o $(TARGET) $(RTL_SRCS) $(SIM_SRCS)
+$(TARGET): $(PKG_SRCS) $(RTL_SRCS) $(SIM_SRCS)
+	verilator $(VERILATOR_FLAGS) -o $(TARGET) $(PKG_SRCS) $(RTL_SRCS) $(SIM_SRCS)
 
 run: $(TARGET)
 	./obj_dir/$(TARGET)

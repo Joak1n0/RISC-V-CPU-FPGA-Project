@@ -1,5 +1,5 @@
 module load_store_decoder (
-    input logic [2:0] funct3,
+    input logic [2:0] func3,
     input logic [31:0] alu_result_address,
     input logic [31:0] reg_read_data,
 
@@ -14,7 +14,7 @@ logic [1:0] address_offset;
 assign address_offset = alu_result_address[1:0];
 
 always_comb begin
-    case(funct3)
+    case(func3)
         F3_BYTE, F3_BYTE_U: begin
             case(address_offset)
                 2'b00: begin
@@ -32,30 +32,6 @@ always_comb begin
                 2'b11: begin
                     mem_byte_enable = 4'b1000; // Enable only the highest byte
                     data = (reg_read_data & 32'hFF000000) >> 24; // Use only the highest byte of the register value
-                end
-                default: begin
-                    mem_byte_enable = 4'b0000; // Default case (should not occur)
-                    data = 32'b0; // Default case (should not occur)
-                end
-            endcase
-        end
-        F3_BYTE_U: begin
-            case(address_offset)
-                2'b00: begin
-                    mem_byte_enable = 4'b0001; // Enable only the lowest byte
-                    data = {24'b0, reg_read_data[7:0]}; // Zero-extend the lowest byte for unsigned byte access
-                end
-                2'b01: begin
-                    mem_byte_enable = 4'b0010; // Enable only the second byte
-                    data = {24'b0, reg_read_data[15:8]}; // Zero-extend the second byte for unsigned byte access
-                end
-                2'b10: begin
-                    mem_byte_enable = 4'b0100; // Enable only the third byte
-                    data = {24'b0, reg_read_data[23:16]}; // Zero-extend the third byte for unsigned byte access
-                end
-                2'b11: begin
-                    mem_byte_enable = 4'b1000; // Enable only the highest byte
-                    data = {24'b0, reg_read_data[31:24]}; // Zero-extend the highest byte for unsigned byte access
                 end
                 default: begin
                     mem_byte_enable = 4'b0000; // Default case (should not occur)

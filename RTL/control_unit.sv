@@ -1,7 +1,7 @@
 module control_unit (
     input logic [6:0] op,
-    input logic [2:0] funct3,
-    input logic [6:0] funct7,
+    input logic [2:0] func3,
+    input logic [6:0] func7,
     input logic alu_zero,
     input logic alu_last_bit,
 
@@ -26,8 +26,15 @@ import pkg_riscvi32::*;
     logic branch;
     logic jump;
 
+
     always_comb begin
+        alu_op = 2'b00;
+        second_add_source = 2'b00;
+        alu_source = 0;
+        write_back_source = 0;
+        imm_source = 3'b000;
         case (op) 
+            
             // I-Type Instructions
             OPCODE_I_TYPE_LOAD: begin
                 reg_write = 1'b1;
@@ -48,15 +55,14 @@ import pkg_riscvi32::*;
                 write_back_source = 2'b00; // Write back from ALU
                 branch = 1'b0;
                 jump = 1'b0;
-                // Note from HolyCore: Shift instructions with constant require funct7 check for SRA
+                // Note from HolyCore: Shift instructions with constant require func7 check for SRA
                 // ie :     TODO: look if this works properly JAC
                 // - 7 upper bits are interpreted as a "f7", ony valid for a restricted selection tested below
                 // - 5 lower as shamt (because max shift is 32bits and 2^5 = 32).
-                reg_write = 1'b1; // reg_write is set to 1 for ALU I-type instructions, but we need to check funct3 and funct7 for shift instructions
+                reg_write = 1'b1; // reg_write is set to 1 for ALU I-type instructions, but we need to check func3 and func7 for shift instructions
                 if (func3 == F3_SLL) begin
                     reg_write = (func7 == F7_SLL_SRL);
-                end
-                else if (func3 == F3_SRL_SRA) begin
+                end else if (func3 == F3_SRL_SRA) begin
                     reg_write = (func7 == F7_SLL_SRL) || (func7 == F7_SRA);
                 end
             end
@@ -94,6 +100,8 @@ import pkg_riscvi32::*;
             OPCODE_J_TYPE, OPCODE_J_TYPE_JALR: begin
                 reg_write = 1'b1;
                 mem_write = 1'b0;
+                branch = 1'b0;
+                jump = 1'b1;
                 imm_source = (op == OPCODE_J_TYPE) ? 3'b011 : 3'b000; // J-Type immediate for JAL, I-Type immediate for JALR
                 second_add_source = (op == OPCODE_J_TYPE) ? 2'b00 : 2'b10; // Use immediate value for JAL, use register value for JALR
             end
@@ -105,14 +113,13 @@ import pkg_riscvi32::*;
                 write_back_source = 2'b11; // Write back from ALU
                 branch = 1'b0;
                 jump = 1'b0;
-                second_add_source = ( op == OPCODE_U_TYPE_LUI) ? 2'b01 : 2'b00; // Use immediate value for LUI, use PC for AUIPC
+                second_add_source = (op == OPCODE_U_TYPE_LUI) ? 2'b01 : 2'b00; // Use immediate value for LUI, use PC for AUIPC
             end
             default: begin
                 reg_write = 1'b0;
                 mem_write = 1'b0;
                 jump = 1'b0;
                 branch = 1'b0;
-
                 $display("Unknown/Unsupported opcode: %b", op);
             end
         endcase
@@ -129,11 +136,11 @@ import pkg_riscvi32::*;
             end
             // ALU R-type and I-type operations
             ALU_OP_MATH: begin
-                case (funct3)
+                case (func3)
                     F3_ADD_SUB: begin
                         alu_control = ALU_ADD; // ADD operation
-                        if (op == OPCODE_R_TYPE && funct7 == F7_SUB) begin
-                            alu_control = ALU_SUB; // SUB operation for R-type with funct7 = 0100000
+                        if (op == OPCODE_R_TYPE && func7 == F7_SUB) begin
+                            alu_control = ALU_SUB; // SUB operation for R-type with func7 = 0100000
                         end
                     end
                     //AND, OR, XOR, SLL, SRL, SRA, SLT, SLTU
@@ -147,7 +154,7 @@ import pkg_riscvi32::*;
                         alu_control = ALU_XOR; // XOR operation
                     end
                     F3_SRL_SRA: begin
-                        if (funct7 == F7_SRA) begin
+                        if (func7 == F7_SRA) begin
                             alu_control = ALU_SRA; // Shift Right Arithmetic
                         end else begin
                             alu_control = ALU_SRL; // Shift Right Logical
@@ -166,7 +173,7 @@ import pkg_riscvi32::*;
             end
             // ALU operation for branches
             ALU_OP_BRANCHES: begin
-                case (funct3)
+                case (func3)
                     F3_BEQ, F3_BNE: alu_control = ALU_SUB; // SUB operation for BEQ and BNE
                     F3_BLT, F3_BGE: alu_control = ALU_SLT; // SLT operation for BLT and BGE 
                     F3_BLTU, F3_BGEU: alu_control = ALU_SLTU; // SLTU operation for BLTU and BGEU
@@ -186,13 +193,14 @@ import pkg_riscvi32::*;
     always_comb begin : branch_logic_decode
         assert_branch = 1'b0;
         if (branch) begin
-            case (funct3)
+            case (func3)
                 F3_BEQ: assert_branch = alu_zero; // Branch if equal
                 F3_BNE: assert_branch = ~alu_zero; // Branch if not equal
                 F3_BLT: assert_branch = alu_last_bit; // Branch if less than (signed)
                 F3_BGE: assert_branch = ~alu_last_bit; // Branch if greater than or equal (signed)
                 F3_BLTU: assert_branch = alu_last_bit; // Branch if less than (unsigned)
                 F3_BGEU: assert_branch = ~alu_last_bit; // Branch if greater than or equal (unsigned)
+                default : assert_branch = 1'b0;
             endcase
         end
     end

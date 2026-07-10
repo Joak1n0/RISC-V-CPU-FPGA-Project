@@ -1,7 +1,7 @@
 module data_reader (
     input logic [31:0] mem_data,
     input logic [3:0] be_mask,
-    input logic [2:0] funct3,
+    input logic [2:0] func3,
     output logic [31:0] wb_data,
     output logic wb_valid
 );
@@ -9,7 +9,7 @@ module data_reader (
 import pkg_riscvi32::*;
 
 logic sign_extend;
-assign sign_extend = ~funct3[2]; // Sign extend for signed load instructions (LB, LH, LBU, LHU)
+assign sign_extend = ~func3[2]; // Sign extend for signed load instructions (LB, LH, LBU, LHU)
 
 logic [31:0] masked_data; // Data after applying byte enable mask
 logic [31:0] shifted_data; // Data after shifting based on address offset
@@ -25,7 +25,7 @@ always_comb begin : masked_data_logic
 end
 
 always_comb begin : shifted_data_logic
-    case (funct3)
+    case (func3)
         F3_WORD: begin
             shifted_data = masked_data; // No shift for word access
         end
@@ -39,7 +39,7 @@ always_comb begin : shifted_data_logic
             endcase
         end
 
-        F3_HALF, F3_HALF_U: begin
+        F3_HALFWORD, F3_HALFWORD_U: begin
             case (be_mask)
                 4'b0011: shifted_data = {16'b0, masked_data[15:0]}; // Halfword 0
                 4'b1100: shifted_data = {16'b0, masked_data[31:16]}; // Halfword 1
@@ -55,7 +55,7 @@ always_comb begin : shifted_data_logic
 end
 
 always_comb begin : sign_extend_logic
-    case (funct3)
+    case (func3)
         F3_WORD: begin // LW
             wb_data = shifted_data; // No sign extension for word loads
         end
@@ -70,7 +70,7 @@ always_comb begin : sign_extend_logic
         end
     endcase
 
-    valid = |be_mask; // Valid if any byte is enabled
+    wb_valid = |be_mask; // Valid if any byte is enabled
     
 end
 
