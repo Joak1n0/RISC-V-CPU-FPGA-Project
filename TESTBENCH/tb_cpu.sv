@@ -1,25 +1,22 @@
 module tb_cpu;
 
-    reg clk = 0;
-    reg rst = 1;
-    reg [31:0] instr;
-    wire [31:0] pc;
+    logic clk = 0;
+    logic rst_n = 1;
+
 
     cpu_top dut (
         .clk(clk),
-        .rst(rst),
-        .instr(instr),
-        .pc(pc)
+        .rst_n(rst_n)
     );
 
-    always #5 clk = ~clk;
+    always #5 clk <= ~clk;
 
     initial begin
         $dumpfile("waveform.vcd");
         $dumpvars(0, tb_cpu);
 
         #20;
-        rst = 0;
+        rst_n = 0;
 
         #500;
         $finish;

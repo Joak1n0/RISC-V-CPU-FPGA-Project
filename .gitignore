@@ -2,3 +2,6 @@ useful_commands.txt
 *obj_dir*
 SIMULATION/obj_dir/*
 *.vcd
+*.elf
+*.bin
+SOFTWARE/*.elf
