@@ -37,7 +37,7 @@ RTL_SRCS = \
 TB_SRCS = $(TB_PATH)/tb_cpu.sv
 
 
-all: main.elf main.dump main.bin
+all: clean main.elf main.dump main.bin mem_gen sim
 
 main.elf: crt0.S main.c link.ld
 	$(CC) $(CFLAGS) -T link.ld crt0.S main.c -o main.elf
@@ -51,12 +51,19 @@ main.bin: main.elf
 hex: main.bin
 	xxd -p -c 4 main.bin
 
-hex_gen:
+mem_gen:
 	riscv64-unknown-elf-objcopy -O verilog main.elf main.hex
+	python3 instr_mem_gen.py
 
 sim:
 	verilator $(VERILATOR_FLAGS) $(PKG_SRCS) $(RTL_SRCS) $(TB_SRCS) --top-module $(TOP_MODULE)
+	./obj_dir/Vtb_cpu
+
+
+
+wave:
+	gtkwave waveform.vcd debug_session.gtkw
 
 
 clean:
-	rm -f main.elf main.dump main.bin
+	rm -f main.elf main.dump main.bin main.hex

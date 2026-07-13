@@ -6,7 +6,12 @@ module instr_mem (
     reg [31:0] mem [0:255];
 
     initial begin
-        $readmemh("SOFTWARE/main.hex", mem);
+        $readmemh("../SOFTWARE/main.mem", mem);
+        $display("===== Instruction Memory =====");
+        for (int i = 0; i < 16; i++) begin
+            $display("mem[%0d] = %08h", i, mem[i]);
+        end
+        $display("==============================");
     end
 
     /* verilator lint_off WIDTHTRUNC */

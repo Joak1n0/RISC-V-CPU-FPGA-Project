@@ -1,0 +1,28 @@
+[*]
+[*] GTKWave Analyzer v3.3.116 (w)1999-2023 BSI
+[*] Mon Jul 13 10:00:02 2026
+[*]
+[dumpfile] "/home/joaquin/Projects/RISC-V-CPU-FPGA-Project/SOFTWARE/waveform.vcd"
+[dumpfile_mtime] "Mon Jul 13 09:55:02 2026"
+[dumpfile_size] 17823
+[savefile] "/home/joaquin/Projects/RISC-V-CPU-FPGA-Project/SOFTWARE/waveform_file.gtkw"
+[timestart] 0
+[size] 927 1001
+[pos] -7 -4
+*-0.600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.tb_cpu.
+[sst_width] 278
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 297
+@28
+TOP.tb_cpu.clk
+TOP.tb_cpu.rst_n
+@22
+TOP.tb_cpu.dut.op[6:0]
+TOP.tb_cpu.dut.pc[31:0]
+@23
+TOP.tb_cpu.dut.immediate[31:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -5,3 +5,4 @@ SIMULATION/obj_dir/*
 *.elf
 *.bin
 SOFTWARE/*.elf
+SOFTWARE/main.elf
